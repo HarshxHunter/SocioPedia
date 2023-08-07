@@ -79,7 +79,7 @@ const Navbar = () => {
                 <Message sx={{ fontSize: "25px"}} />
                 <Notifications sx={{ fontSize: "25px"}} />
                 <IconButton onClick={() => navigate("/help")}>
-                    <Help sx={{ fontSize: "25px", "&:hover": {cursor:"pointer"}}} />
+                    <Help sx={{ fontSize: "25px", "&:hover": {cursor:"pointer"}, color:dark}} />
                 </IconButton>
                 
                 <FormControl variant="standard"  value={fullName}>
