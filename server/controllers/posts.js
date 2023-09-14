@@ -1,11 +1,11 @@
 import Post from "../models/Post.js";
-import User from "../models/User.js";
+import UserSocio from "../models/User.js";
 
 // CREATE 
 export const createPost = async (req,res) => {
     try {
         const {userId, description, picturePath }= req.body;
-        const user= await User.findById(userId);
+        const user= await UserSocio.findById(userId);
         const newPost = new Post({
             userId,
             firstName: user.firstName,
@@ -16,7 +16,7 @@ export const createPost = async (req,res) => {
             picturePath,
             likes: {},
             comments: []
-        })
+        });
         await newPost.save();
 
         const post = await Post.find();
@@ -24,7 +24,7 @@ export const createPost = async (req,res) => {
     } catch(err) {
         res.status(409).json({ message: err.message });
     }
-}
+};
 
 // READ 
 export const getFeedPosts = async (req,res) => {
@@ -34,7 +34,7 @@ export const getFeedPosts = async (req,res) => {
     } catch(err) {
         res.status(404).json({ message: err.message });
     }
-}
+};
 
 export const getUserPosts = async (req,res) => {
     try {
@@ -44,7 +44,7 @@ export const getUserPosts = async (req,res) => {
     } catch(err) {
         res.status(404).json({ message: err.message });
     }
-}
+};
 
 // UPDATE 
 export const likePost = async (req,res) => {
@@ -70,4 +70,22 @@ export const likePost = async (req,res) => {
     } catch(err) {
         res.status(404).json({ message: err.message });
     }
-}
+};
+
+export const commentPost = async (req, res) => {
+    try {
+      const { id } = req.params;
+      const { text, firstName, picturePath, userId } = req.body;
+      const post = await Post.findById(id);
+      const comment = { userId, text, firstName, picturePath }; // include firstName and picturePath here
+      post.comments.push(comment);
+      const updatedPost = await Post.findByIdAndUpdate(
+        id,
+        { comments: post.comments },
+        { new: true } // pass options object as a single argument
+      );
+      res.status(200).json(updatedPost);
+    } catch (err) {
+      res.status(404).json({ message: err.message });
+    }
+  };

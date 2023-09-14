@@ -4,7 +4,11 @@ const initialState = {
     mode: "light",
     user: null,
     token: null,
-    posts: []
+    posts: [],
+    city: null,
+    users: [],
+    URL: "http://localhost:3001",
+    isLoading: null
 };
 
 export const authSlice = createSlice({
@@ -38,9 +42,22 @@ export const authSlice = createSlice({
                 return post;
             });
             state.posts = updatedPosts;
-        }
+        },
+        setCity: (state, action) => {
+            state.city = action.payload;
+        },
+        updateUser: (state, action) => {
+            state.user = action.payload.user
+            state.token = action.payload.token;
+        },
+        setUsers: (state, action) => {
+            state.users = action.payload.users;
+        },
+        setIsLoading: (state, action) => {
+            state.isLoading = action.payload.isLoading
+          }
     }
-})
+});
 
-export const { setMode, setLogin, setLogout, setFriends, setPosts, setPost} = authSlice.actions;
+export const { setMode, setLogin, setLogout, setFriends, setPosts, setPost,setUsers,setIsLoading } = authSlice.actions;
 export default authSlice.reducer;

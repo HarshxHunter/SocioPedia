@@ -7,6 +7,7 @@ const AdvertWidget = () => {
     const dark = palette.neutral.dark;
     const main = palette.neutral.main;
     const medium = palette.neutral.medium;
+    // const URL = useSelector((state) => state.URL)
 
     return (
         <WidgetWrapper>
@@ -24,8 +25,8 @@ const AdvertWidget = () => {
                 style={{ borderRadius: "0.75rem", margin: "0.75rem 0"}}
             />
             <FlexBetween>
-                <Typography color={main}>MikaCosmetics</Typography>
-                <Typography color={medium}>mikacosmetics.com</Typography>
+                <Typography color={main}>MayaCosmetics</Typography>
+                <Typography color={medium}>mayacosmetics.com</Typography>
             </FlexBetween>
             <Typography color={medium} m="0.5rem 0">
                 Your pathway to stunning and immaculate beauty and made sure your skin 

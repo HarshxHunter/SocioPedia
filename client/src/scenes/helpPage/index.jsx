@@ -47,9 +47,11 @@ const HelpPage = () => {
                     <li>Create New Account through our Registration page or Login In if already have a account.</li>
                     <li>Post Your Thoughts or Pictures by creating and posting a new Post through Post widget.</li>
                     <li>You can see posts from all people having account in Sociopedia</li>
+                    <li>Search Users and view thier profiles.</li>
                     <li>Go to a Person's Profile Page by clicking on their Name and Know them More.</li>
-                    <li>Add or Remove a person as a friend by clicking on the AddRemoveFriend Icon beside a person Name.</li>
+                    <li>Add or Remove a person as a friend by clicking on the AddRemoveFriend Icon beside a person's Name.</li>
                     <li>Like and Unlike Post And Read Comments.</li>
+                    <li>Post your own comments.</li>
                     <li>Toggle between Dark and Light Mode.</li>
                     <li>Make sure to Logout before Leaving the Site.</li>
                 </ul> 
@@ -82,7 +84,7 @@ const HelpPage = () => {
                         <Typography>70429XXXXX</Typography>
                     </FlexBetween>
             </FlexBetween> 
-            <Box position="fixed" left="40rem">
+            <Box position="fixed" left="43rem">
                 <p><br /></p>
                 <Typography>Copyright ⓒ {year}</Typography>  
             </Box>  

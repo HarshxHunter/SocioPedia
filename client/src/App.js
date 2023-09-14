@@ -13,7 +13,6 @@ function App() {
   const mode = useSelector((state) => (state.mode));
   const theme = useMemo(() => createTheme(themeSettings(mode)), [mode]);
   const isAuth = Boolean(useSelector((state) => state.token));
-  
 
   return (
     <div className="app">
@@ -21,10 +20,10 @@ function App() {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <Routes>
-          <Route path="https://sociopedia-server-m6bx.onrender.com/" element={<LoginPage />} />
-          <Route path="https://sociopedia-server-m6bx.onrender.com/home" element={isAuth ? <HomePage /> : <Navigate to="https://sociopedia-server-m6bx.onrender.com/" />} />
-          <Route path="https://sociopedia-server-m6bx.onrender.com/profile/:userId" element={isAuth ? <ProfilePage /> : <Navigate to="https://sociopedia-server-m6bx.onrender.com/" />} />
-          <Route path="https://sociopedia-server-m6bx.onrender.com/help" element={isAuth ? <HelpPage /> : <Navigate to="https://sociopedia-server-m6bx.onrender.com/" />} />
+          <Route path="/" element={<LoginPage />} />
+          <Route path="/home" element={isAuth ? <HomePage /> : <Navigate to="/" />} />
+          <Route path="/profile/:userId" element={isAuth ? <ProfilePage /> : <Navigate to="/" />} />
+          <Route path="/help" element={isAuth ? <HelpPage /> : <Navigate to="/" />} />
         </Routes>
       </ThemeProvider>
     </BrowserRouter>

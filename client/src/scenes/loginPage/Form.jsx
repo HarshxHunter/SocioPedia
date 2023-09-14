@@ -12,10 +12,11 @@ import { Formik } from "formik";
 import * as yup from "yup";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { setLogin } from "state";
+import { setIsLoading, setLogin } from "state";
+import { useSelector } from "react-redux";
 import Dropzone from "react-dropzone";
 import FlexBetween from "components/FlexBetween";
-// import { Edit } from "@mui/icons-material";
+import Loader from "components/Loader";
 
 const registerSchema = yup.object().shape({
     firstName: yup.string().required("required"),
@@ -55,8 +56,11 @@ const Form = () => {
     const isNonMobile = useMediaQuery("(min-width:600px)");
     const isLogin = pageType === "login";
     const isRegister = pageType === "register";
+    const URL = useSelector((state) => state.URL);
+    const isLoading = useSelector((state) => state.isLoading);
     
     const register = async (values, onSubmitProps) => {
+        dispatch(setIsLoading({isLoading: true}));
         // this allows us to send form info with image
         const formData = new FormData();
         for (let value in values) {
@@ -65,7 +69,7 @@ const Form = () => {
         formData.append("picturePath", values.picture.name);
 
         const savedUserResponse = await fetch(
-            "http://localhost:3001/auth/register",
+            `${URL}/auth/register`,
             {
                 method: "POST",
                 body: formData,
@@ -77,25 +81,28 @@ const Form = () => {
         if (savedUser) {
             setPageType("login");
         }
+        dispatch(setIsLoading({isLoading: false}));
     };
 
     const login = async (values, onSubmitProps) => {
-        const loggedInResponse = await fetch("http://localhost:3001/auth/login", {
+        dispatch(setIsLoading({isLoading: true}));
+        const loggedInResponse = await fetch(`${URL}/auth/login`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json"},
                 body: JSON.stringify(values)
             });
-            const loggedIn = await loggedInResponse.json();
-            onSubmitProps.resetForm();
-            if (loggedIn) {
-                dispatch(
-                    setLogin({
-                        user: loggedIn.user,
-                        token: loggedIn.token
-                    })
-                );
-                navigate("/home");
-            }
+        const loggedIn = await loggedInResponse.json();
+        onSubmitProps.resetForm();
+        if (loggedIn) {
+            dispatch(
+                setLogin({
+                    user: loggedIn.user,
+                    token: loggedIn.token
+                })
+            );
+            navigate("/home");
+        }
+        dispatch(setIsLoading({isLoading: false}));
     };
 
     const handleFormSubmit = async (values, onSubmitProps) => {
@@ -244,6 +251,7 @@ const Form = () => {
                         >
                             {isLogin ? "LOGIN" : "REGISTER"}
                         </Button>
+                        {isLoading ? <Loader/> : <></>}
                         <Typography
                             onClick={() => {
                                 setPageType(isLogin ? "register" : "login");

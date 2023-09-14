@@ -1,30 +1,38 @@
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { setPosts } from "state";
+import { setIsLoading,setPosts } from "state";
 import PostWidget from "./PostWidget";
+import Loader from "components/Loader";
 
 const PostsWidget = ({ userId, isProfile = false}) => {
     const dispatch = useDispatch();
     const posts = useSelector((state) => state.posts);
     const token = useSelector((state) => state.token);
+    const URL = useSelector((state) => state.URL);
+    const isLoading = useSelector((state) => state.isLoading)
 
     const getPosts = async () => {
-        const response = await fetch("http://localhost:3001/posts", {
-            method: "GET",
-            headers: { Authorization: `Bearer ${token}` },
+        dispatch(setIsLoading({isLoading: true}))
+        const response = await fetch(`${URL}/posts`, {
+          method: "GET",
+          headers: { Authorization: `Bearer ${token}` },
         });
         const data = await response.json();
         dispatch(setPosts({ posts: data }));
-    };
-
-    const getUserPosts = async () => {
-        const response = await fetch(`http://localhost:3001/posts/${userId}/posts`, {
+        dispatch(setIsLoading({isLoading: false}))
+      };
+    
+      const getUserPosts = async () => {
+        const response = await fetch(
+          `${URL}/posts/${userId}/posts`,
+          {
             method: "GET",
             headers: { Authorization: `Bearer ${token}` },
-        });
+          }
+        );
         const data = await response.json();
         dispatch(setPosts({ posts: data }));
-    };
+      };
 
     useEffect(() => {
         if(isProfile) {
@@ -33,6 +41,10 @@ const PostsWidget = ({ userId, isProfile = false}) => {
             getPosts();
         }
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+    if (isLoading) {
+        return <Loader />;
+      } 
 
     return (
         <>
@@ -47,7 +59,8 @@ const PostsWidget = ({ userId, isProfile = false}) => {
                     picturePath,
                     userPicturePath,
                     likes,
-                    comments
+                    comments,
+                    createdAt
                 }) => (
                     <PostWidget
                         key={_id} 
@@ -60,6 +73,7 @@ const PostsWidget = ({ userId, isProfile = false}) => {
                         userPicturePath={userPicturePath}
                         likes={likes}
                         comments={comments}
+                        createdAt={createdAt}
                     />
                 )
             )}

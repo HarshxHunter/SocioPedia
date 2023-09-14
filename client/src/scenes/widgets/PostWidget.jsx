@@ -11,6 +11,8 @@ import WidgetWrapper from "components/WidgetWrapper";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setPost } from "state";
+import CommentForm from "components/CommentForm";
+import UserCommentImage from "components/UserCommentImage";
 
 const PostWidget = ({
     postId, 
@@ -22,6 +24,7 @@ const PostWidget = ({
     userPicturePath,
     likes,
     comments,
+    createdAt,
 }) => {
     const [isComments, setIsComments] = useState(false);
     const dispatch = useDispatch();
@@ -29,13 +32,16 @@ const PostWidget = ({
     const loggedInUserId = useSelector((state) => state.user._id);
     const isLiked = Boolean(likes[loggedInUserId]);
     const likeCount = Object.keys(likes).length; 
-    
+    const date = new Date(createdAt);
+    const formattedDate = `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
+    const URL = useSelector((state) => state.URL)
+
     const { palette } = useTheme();
     const main = palette.neutral.main;
     const primary = palette.primary.main;
 
     const patchLike = async () => {
-        const response = await fetch(`http://localhost:3001/posts/${postId}/like`, {
+        const response = await fetch(`${URL}/posts/${postId}/like`, {
             method: "PATCH",
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -64,12 +70,11 @@ const PostWidget = ({
                     height="auto"
                     alt="post"
                     style={{ borderRadius: "0.75rem", marginTop: "0.75rem" }}
-                    src={`http://localhost:3001/assets/${picturePath}`}
+                    src={`${URL}/assets/${picturePath}`}
                 />
             )}
             <FlexBetween mt="0.25rem">
                 <FlexBetween gap="1rem">
-
                     <FlexBetween gap="0.3rem">
                         <IconButton onClick={patchLike}>
                             {isLiked ? (
@@ -88,6 +93,9 @@ const PostWidget = ({
                     </FlexBetween>             
                 </FlexBetween>
 
+                <Typography color={main} sx={{ mt: "1rem" }} >
+                    {formattedDate}
+                </Typography>
                 <IconButton>
                     <ShareOutlined />
                 </IconButton>
@@ -97,11 +105,47 @@ const PostWidget = ({
                     {comments.map((comment, index) => (
                         <Box key={`${name}-${index}`}>
                             <Divider />
-                            <Typography sx={{ color: main, m: "0.5rem 0", pl:"1rem" }}>
+                            {/* <Typography sx={{ color: main, m: "0.5rem 0", pl:"1rem" }}>
                                 {comment}
-                            </Typography>
+                            </Typography> */}
+                            <FlexBetween sx={{ p: "0" }}>
+                                <Box sx={{
+                                        display: "flex",
+                                        alignItems: "center",
+                                        p: "0rem 0rem 0rem 0rem",
+                                    }}
+                                >
+                                    <UserCommentImage
+                                        image={comment.picturePath}
+                                        alt={comment.firstName}
+                                    />
+                                    <Box
+                                        sx={{
+                                        display: "flex",
+                                        flexDirection: "column",
+                                        justifyContent: "center",
+                                        p: "0rem 0rem 0rem 0.5rem",
+                                        }}
+                                    >
+                                        <Typography sx={{ p: "0.5rem 0 0 0" }}>
+                                            {comment.firstName}
+                                        </Typography>
+                                        {/* <Typography sx={{ ml: "3.5rem", p: "0rem 0rem 1rem 0rem" }}> */}
+                                        <Typography
+                                            color={main}
+                                            sx={{ p: "0.5rem 0rem 0rem 0rem" }}
+                                        >
+                                            {comment.text}
+                                        </Typography>
+                                    </Box>
+                                </Box>
+                                <Typography color={main}>
+                                    {new Date(comment.createdAt).toLocaleString()}
+                                </Typography>
+                            </FlexBetween>
                         </Box>
                     ))}
+                    <CommentForm postId={postId} />
                     <Divider />
                 </Box>
             )}

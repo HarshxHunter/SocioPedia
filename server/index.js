@@ -14,8 +14,9 @@ import postRoutes from "./routes/posts.js";
 import { register } from "./controllers/auth.js";
 import { createPost } from "./controllers/posts.js";
 import { verifyToken } from "./middleware/auth.js";
-import User from "./models/User.js";
+import UserSocio from "./models/User.js";
 import Post from "./models/Post.js";
+import Image from "./models/Image.js";
 import { users, posts} from "./data/index.js";
 
 // CONFIGURATION
@@ -62,7 +63,7 @@ mongoose.connect(process.env.MONGO_URL, {
     app.listen(PORT , () => console.log(`Server port: ${PORT}`));
 
     // ADD MOCK DATA ADN ONLY 1 TIME
-    // User.insertMany(users);
+    // UserSocio.insertMany(users);
     // Post.insertMany(posts);
 
 })
