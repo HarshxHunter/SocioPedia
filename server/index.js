@@ -16,7 +16,6 @@ import { createPost } from "./controllers/posts.js";
 import { verifyToken } from "./middleware/auth.js";
 import UserSocio from "./models/User.js";
 import Post from "./models/Post.js";
-import Image from "./models/Image.js";
 import { users, posts} from "./data/index.js";
 
 // CONFIGURATION

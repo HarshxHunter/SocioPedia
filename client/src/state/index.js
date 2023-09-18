@@ -7,7 +7,7 @@ const initialState = {
     posts: [],
     city: null,
     users: [],
-    URL: "http://localhost:3001",
+    URL: process.env.REACT_APP_BASE_URL,
     isLoading: null
 };
 
