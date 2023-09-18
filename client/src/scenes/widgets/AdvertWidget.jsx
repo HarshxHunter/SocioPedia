@@ -8,7 +8,7 @@ const AdvertWidget = () => {
     const main = palette.neutral.main;
     const medium = palette.neutral.medium;
     // const URL = useSelector((state) => state.URL)
-
+    
     return (
         <WidgetWrapper>
             <FlexBetween>

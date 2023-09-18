@@ -11,7 +11,7 @@ const UserCommentImage = ({ image, size = "40px" }) => {
         width={size}
         height={size}
         alt="avtr"
-        src={`${URL}/assets/${image}`}
+        src={`${image}`}
       />
     </Box>
   );

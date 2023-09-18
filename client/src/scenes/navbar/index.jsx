@@ -8,15 +8,13 @@ import {
     MenuItem,
     FormControl,
     useTheme,
-    useMediaQuery,
-    Button
+    useMediaQuery
 } from "@mui/material";
 import {
     Search,
     Message,
     DarkMode,
     LightMode,
-    Notifications,
     Help,
     Menu,
     Close

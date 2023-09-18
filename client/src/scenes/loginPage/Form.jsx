@@ -50,6 +50,7 @@ const initialValuesLogin = {
 
 const Form = () => {
     const [pageType, setPageType] = useState("login");
+    const [image , setImage] = useState("");
     const { palette } = useTheme();
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -62,11 +63,16 @@ const Form = () => {
     const register = async (values, onSubmitProps) => {
         dispatch(setIsLoading({isLoading: true}));
         // this allows us to send form info with image
+
         const formData = new FormData();
         for (let value in values) {
             formData.append(value, values[value])
         }
-        formData.append("picturePath", values.picture.name);
+        if(image){
+            const base64 = await convertTobase64(image);
+            formData.append("picturePath", base64);
+        }
+        // formData.append("picturePath", values.picture.name);
 
         const savedUserResponse = await fetch(
             `${URL}/auth/register`,
@@ -82,6 +88,20 @@ const Form = () => {
             setPageType("login");
         }
         dispatch(setIsLoading({isLoading: false}));
+    };
+
+    const convertTobase64 = (file) => {
+        return new Promise((resolve, reject)=>{
+          const fileReader = new FileReader();
+          fileReader.readAsDataURL(file);
+    
+          fileReader.onload = () => {
+            resolve(fileReader.result);
+          };
+          fileReader.onerror = (error) => {
+            reject(error);
+          };
+        })
     };
 
     const login = async (values, onSubmitProps) => {
@@ -186,8 +206,10 @@ const Form = () => {
                                     <Dropzone
                                         acceptedFiles=".jpg,.jpeg,.png"
                                         multiple={false}
-                                        onDrop={(acceptedFiles) => 
-                                            setFieldValue("picture", acceptedFiles[0])
+                                        onDrop={(acceptedFiles) => {
+                                            setFieldValue("picture", acceptedFiles[0]);
+                                            setImage(acceptedFiles[0]);
+                                            }
                                         }
                                     >
                                         {({ getRootProps, getInputProps }) => (
